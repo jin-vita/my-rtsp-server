@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_example_rtmp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+<!--    Used to support api 16 but OpenGlView is recommended-->
+    <com.pedro.rtplibrary.view.OpenGlView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/surfaceView"
+        />
+
+<!--    <com.pedro.rtplibrary.view.OpenGlView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:id="@+id/surfaceView"-->
+<!--        />-->
+
+    <TextView
+        android:textSize="24sp"
+        android:textColor="@color/appColor"
+        android:textColorHint="@color/appColor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_margin="20dp"
+        android:id="@+id/tv_url"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="#BEE7FA"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <Button
+            android:id="@+id/b_record"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="20dp"
+            android:text="@string/start_record" />
+
+        <Button
+            android:id="@+id/b_start_stop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="20dp"
+            android:text="@string/start_button" />
+
+        <Button
+            android:id="@+id/switch_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:text="@string/switch_camera_button" />
+
+        <Button
+            android:id="@+id/exposureButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Exposure" />
+
+        <TextView
+            android:id="@+id/output1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+</RelativeLayout>

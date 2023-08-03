@@ -15,6 +15,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import android.util.Log
 import android.util.Size
@@ -31,8 +32,14 @@ import com.pedro.encoder.input.video.CameraOpenException
 import com.pedro.rtsp.utils.ConnectCheckerRtsp
 import com.pedro.rtspserver.RtspServerCamera2
 import kotlinx.android.synthetic.main.activity_camera2_demo.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.File
 import java.io.IOException
+import java.net.Inet4Address
+import java.net.NetworkInterface
+import java.net.SocketException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -51,7 +58,7 @@ class Camera2DemoActivity : AppCompatActivity(), ConnectCheckerRtsp, View.OnClic
   private var currentDateAndTime = ""
   private lateinit var folder: File
 
-  val handler = Handler()
+  val handler = Handler(Looper.getMainLooper())
 
   var cameraIds = arrayOfNulls<String>(0)
 
@@ -103,6 +110,52 @@ class Camera2DemoActivity : AppCompatActivity(), ConnectCheckerRtsp, View.OnClic
       }
     }
 
+    save()
+  }
+
+  private fun save() {
+    RobotClient.api.postDeviceSave(
+      requestCode = 7777777,
+      id = "LTR-SMC-001-F",
+      name = "소규모 로봇 1호기 전방",
+      dept = "서울삼성병원",
+      type = "LTR",
+      group_id = "LTR-SMC",
+      regid = "",
+      ip = getIP(),
+      mac = "",
+      mobile = "",
+      ostype = "",
+      osversion = "",
+      manufacturer = "",
+      model = "",
+      display = "",
+      extra1 = "",
+      extra2 = "",
+      extra3 = "",
+      access = "",
+      permission = ""
+    ).enqueue(object : Callback<DeviceSaveResponse> {
+      override fun onResponse(call: Call<DeviceSaveResponse>, response: Response<DeviceSaveResponse>) {}
+      override fun onFailure(call: Call<DeviceSaveResponse>, t: Throwable) { handler.postDelayed(::save, 10000) }
+    })
+  }
+
+  private fun getIP(): String {
+    try {
+      val en = NetworkInterface.getNetworkInterfaces()
+      while (en.hasMoreElements()) {
+        val it = en.nextElement()
+        val enumIpAddress = it.inetAddresses
+        while (enumIpAddress.hasMoreElements()) {
+          val inetAddress = enumIpAddress.nextElement()
+          if (!inetAddress.isLoopbackAddress && inetAddress is Inet4Address)
+            return inetAddress.getHostAddress() ?: "unknown IP"
+        }
+      }
+    } catch (_: SocketException) {
+    }
+    return "unknown IP"
   }
 
   private fun hasPermissions(context: Context?, vararg permissions: String): Boolean {

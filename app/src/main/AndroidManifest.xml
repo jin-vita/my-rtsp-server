@@ -54,7 +54,6 @@
             </intent-filter>
         </receiver>
 
-
         <receiver
             android:name=".DeviceAdmin"
             android:description="@string/app_name"
@@ -69,7 +68,6 @@
                 <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
             </intent-filter>
         </receiver>
-
 
         <activity
             android:name=".CameraDemoActivity"
@@ -92,7 +90,6 @@
             android:name=".MainActivity"
             android:screenOrientation="landscape"
             android:exported="true">
-
         </activity>
 
         <service

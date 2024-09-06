@@ -110,7 +110,7 @@ class Camera2DemoActivity : AppCompatActivity(), ConnectCheckerRtsp, View.OnClic
       }
     }
 
-    save()
+//    save()
   }
 
   private fun save() {

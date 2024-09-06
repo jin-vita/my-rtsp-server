@@ -1,14 +1,12 @@
 package com.pedro.sample;
 
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.Service;
+import android.app.*;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -196,6 +194,7 @@ public class CameraRtspService extends Service implements ConnectCheckerRtsp {
         Log.d(TAG, "Connection failed. " + reason);
 
         rtspServerCamera2.stopStream();
+        restartApp();
     }
 
     @Override
@@ -218,5 +217,19 @@ public class CameraRtspService extends Service implements ConnectCheckerRtsp {
     @Override
     public void onAuthSuccessRtsp() {
         Log.d(TAG, "Auth success");
+    }
+
+    private void restartApp() {
+        Intent restartIntent = new Intent(getApplicationContext(), Camera2DemoActivity.class);
+        PendingIntent restartPendingIntent = PendingIntent.getActivity(
+                getApplicationContext(), 0, restartIntent, PendingIntent.FLAG_IMMUTABLE);
+
+        // AlarmManager로 1초 뒤에 앱을 재시작하도록 설정
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 1000, restartPendingIntent);
+
+        // 현재 앱 종료
+        stopSelf(); // 서비스 종료
+        System.exit(0); // 프로세스 종료
     }
 }

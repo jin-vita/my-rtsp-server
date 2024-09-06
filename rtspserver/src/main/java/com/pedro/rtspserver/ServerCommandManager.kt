@@ -1,5 +1,9 @@
 package com.pedro.rtspserver
 
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
+import android.os.SystemClock
 import android.util.Base64
 import android.util.Log
 import com.pedro.rtsp.rtsp.Protocol
@@ -12,6 +16,7 @@ import java.io.BufferedReader
 import java.io.IOException
 import java.net.SocketException
 import java.util.regex.Pattern
+import kotlin.system.exitProcess
 
 /**
  *
@@ -19,7 +24,7 @@ import java.util.regex.Pattern
  *
  */
 open class ServerCommandManager(private val serverIp: String, private val serverPort: Int,
-                           val clientIp: String) : CommandsManager() {
+                           val clientIp: String, val context: Context?) : CommandsManager() {
 
   private val TAG = "ServerCommandManager"
   var audioPorts = ArrayList<Int>()
@@ -101,6 +106,9 @@ open class ServerCommandManager(private val serverIp: String, private val server
       portsMatcher.group(2)?.toInt()?.let { ports.add(it) }
     } else {
       Log.e(TAG, "UDP ports not found")
+      if (context != null) {
+        restartApp(context)
+      }
       return false
     }
     if (track == RtpConstants.trackAudio) { //audio ports
@@ -208,5 +216,26 @@ open class ServerCommandManager(private val serverIp: String, private val server
 
   private fun encodeToString(bytes: ByteArray): String? {
     return Base64.encodeToString(bytes, 0, bytes.size, Base64.NO_WRAP)
+  }
+
+  private fun restartApp(context: Context) {
+    val restartIntent = context.packageManager.getLaunchIntentForPackage(context.packageName)
+    val pendingIntentId = 123456
+    val pendingIntent = PendingIntent.getActivity(
+      context,
+      pendingIntentId,
+      restartIntent,
+      PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
+    )
+
+    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    alarmManager.set(
+      AlarmManager.ELAPSED_REALTIME,
+      SystemClock.elapsedRealtime() + 1000,  // 1초 후 앱 재시작
+      pendingIntent
+    )
+
+    // 앱 종료
+    exitProcess(0)
   }
 }

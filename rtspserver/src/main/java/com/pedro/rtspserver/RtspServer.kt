@@ -1,5 +1,6 @@
 package com.pedro.rtspserver
 
+import android.content.Context
 import android.media.MediaCodec
 import android.util.Log
 import com.pedro.rtsp.utils.ConnectCheckerRtsp
@@ -20,7 +21,7 @@ import java.util.concurrent.TimeUnit
  */
 
 open class RtspServer(private val connectCheckerRtsp: ConnectCheckerRtsp,
-  val port: Int): ClientListener {
+  val port: Int, val context: Context? = null): ClientListener {
 
   private val TAG = "RtspServer"
   private var server: ServerSocket? = null
@@ -77,7 +78,7 @@ open class RtspServer(private val connectCheckerRtsp: ConnectCheckerRtsp,
             continue
           }
           val client = ServerClient(clientSocket, serverIp, port, connectCheckerRtsp, clientAddress, sps, pps, vps,
-              sampleRate, isStereo, videoDisabled, audioDisabled, user, password, this)
+              sampleRate, isStereo, videoDisabled, audioDisabled, user, password, this, context)
           client.rtspSender.setLogs(logs)
           client.start()
           synchronized(clients) {

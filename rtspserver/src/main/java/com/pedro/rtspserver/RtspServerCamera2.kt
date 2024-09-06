@@ -35,7 +35,7 @@ open class RtspServerCamera2 : Camera2Base {
 
   constructor(context: Context, useOpengl: Boolean, connectCheckerRtsp: ConnectCheckerRtsp,
     port: Int) : super(context, useOpengl) {
-    rtspServer = RtspServer(connectCheckerRtsp, port)
+    rtspServer = RtspServer(connectCheckerRtsp, port, context)
 
   }
 

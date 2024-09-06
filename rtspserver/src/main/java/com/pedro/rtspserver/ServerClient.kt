@@ -1,5 +1,6 @@
 package com.pedro.rtspserver
 
+import android.content.Context
 import android.util.Log
 import com.pedro.rtsp.rtsp.Protocol
 import com.pedro.rtsp.rtsp.RtspSender
@@ -17,13 +18,13 @@ open class ServerClient(private val socket: Socket, serverIp: String, serverPort
   private val connectCheckerRtsp: ConnectCheckerRtsp, clientAddress: String, sps: ByteBuffer?,
   pps: ByteBuffer?, vps: ByteBuffer?, sampleRate: Int, isStereo: Boolean,
   videoDisabled: Boolean, audioDisabled: Boolean, user: String?, password: String?,
-  private val listener: ClientListener) : Thread() {
+  private val listener: ClientListener, val context: Context?) : Thread() {
 
   private val TAG = "Client"
   private val output = BufferedWriter(OutputStreamWriter(socket.getOutputStream()))
   private val input = BufferedReader(InputStreamReader(socket.getInputStream()))
   val rtspSender = RtspSender(connectCheckerRtsp)
-  val commandsManager = ServerCommandManager(serverIp, serverPort, clientAddress)
+  val commandsManager = ServerCommandManager(serverIp, serverPort, clientAddress, context)
   var canSend = false
 
   init {

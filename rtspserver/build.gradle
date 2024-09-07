@@ -12,10 +12,24 @@ android {
         versionName version_name
     }
 
+    signingConfigs {
+        signing {
+            storeFile file('../keystore_123456.jks')
+            storePassword '123456'
+            keyAlias 'key0'
+            keyPassword '123456'
+        }
+    }
     buildTypes {
+        debug {
+            minifyEnabled false
+            consumerProguardFiles 'proguard-rules.pro'
+            signingConfig signingConfigs.signing
+        }
         release {
             minifyEnabled false
             consumerProguardFiles 'proguard-rules.pro'
+            signingConfig signingConfigs.signing
         }
     }
 

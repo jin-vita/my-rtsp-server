@@ -125,10 +125,10 @@ public class CameraRtspService extends Service implements ConnectCheckerRtsp {
 
         if (!rtspServerCamera2.isStreaming()) {
 
-            int videoWidth = 720;
-            int videoHeight = 1280;
-            int fps = 15;
-            int bitrate = 1200 * 1024;
+            int videoWidth = 360;
+            int videoHeight = 640;
+            int fps = 10;
+            int bitrate = 500 * 1024;
             int rotation = CameraHelper.getCameraOrientation(this);
 
             // MIKE 220727
